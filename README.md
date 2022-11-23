@@ -1,1 +1,6 @@
-# DATA73200_final-project
+# DATA73200 final project
+
+
+## Data
+
+## Sketches
