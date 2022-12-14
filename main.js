@@ -43,9 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     .attr("value", function (d) { return d; })
 
         // select attribute
+        // -------------------------------------Zip code 1----------------------
         d3.select('#zip-code').on('change', function(){
             selectedAttribute = d3.select('#zip-code').property('value');
-            console.log(selectedAttribute)
+            console.log('hi',selectedAttribute)
             filteredData = zipCodesData.filter(d=>{return d['JURISDICTION NAME'] == selectedAttribute})[0]
             console.log(filteredData)
             d3.selectAll('.circle1').attr('opacity' , 0)
@@ -55,17 +56,33 @@ document.addEventListener('DOMContentLoaded', () => {
             var barData = []
             console.log('1',filteredData)
 
-            barData.push({Attribute: 'Male' ,Value: +filteredData['PERCENT MALE']},
-            {Attribute: 'Female' ,Value: filteredData['PERCENT FEMALE']},
-            {Attribute: 'Pacific Islander' ,Value: filteredData['PERCENT PACIFIC ISLANDER']},
-            {Attribute: 'Latino' ,Value: filteredData['PERCENT HISPANIC LATINO']},
-            {Attribute: 'Asian' ,Value: filteredData['PERCENT ASIAN NON HISPANIC']},
-            {Attribute: 'White' ,Value: filteredData['PERCENT WHITE NON HISPANIC']},
-            {Attribute: 'Black' ,Value: filteredData['PERCENT BLACK NON HISPANIC']}) 
-
+            barData.push(
+            {Attribute: 'Male' ,Value: filteredData['PERCENT MALE']},
+            {Attribute: 'Female' ,Value: filteredData['PERCENT FEMALE']})
+            // {Attribute: 'Pacific Islander' ,Value: filteredData['PERCENT PACIFIC ISLANDER']},
             drawBar(barData)
+
+            var barData3 = []
+            console.log('1',filteredData)
+            barData3.push(
+              // {Attribute: 'Pacific Islander' ,Value: filteredData['PERCENT PACIFIC ISLANDER']},
+              {Attribute: 'Latino' ,Value: filteredData['PERCENT HISPANIC LATINO']},
+              {Attribute: 'Asian' ,Value: filteredData['PERCENT ASIAN NON HISPANIC']},
+              {Attribute: 'White' ,Value: filteredData['PERCENT WHITE NON HISPANIC']},
+              {Attribute: 'Black' ,Value: filteredData['PERCENT BLACK NON HISPANIC']}) 
+    
+              drawBar3(barData3)
+
+              var barData5 = []
+              console.log('1',filteredData)
+              barData5.push(
+                {Attribute: '% N Receives Public Assistance' ,Value: filteredData['PERCENT RECEIVES PUBLIC ASSISTANCE']},
+                {Attribute: 'US Citizen' ,Value: filteredData['PERCENT US CITIZEN']})
+                drawBar5(barData5)
         })
 
+
+//--------------------------------------------- Zip code 2-----------------------------------
         d3.select('#zip-code2').on('change', function(){
             selectedAttribute2 = d3.select('#zip-code2').property('value');
             console.log(selectedAttribute2)
@@ -79,17 +96,36 @@ document.addEventListener('DOMContentLoaded', () => {
             
             barData2.push({Attribute: 'Male' ,Value: +filteredData2['PERCENT MALE']},
             {Attribute: 'Female' ,Value: +filteredData2['PERCENT FEMALE']},
-            {Attribute: 'Pacific Islander' ,Value: filteredData2['PERCENT PACIFIC ISLANDER']},
+            // {Attribute: 'Pacific Islander' ,Value: filteredData2['PERCENT PACIFIC ISLANDER']},
+          )
+
+
+            console.log('fil 2' , barData2)
+            drawBar2(barData2)
+            var barData4 = []
+          
+            barData4.push(
+            // {Attribute: 'Pacific Islander' ,Value: filteredData4['PERCENT PACIFIC ISLANDER']},
             {Attribute: 'Latino' ,Value: filteredData2['PERCENT HISPANIC LATINO']},
             {Attribute: 'Asian' ,Value: filteredData2['PERCENT ASIAN NON HISPANIC']},
             {Attribute: 'White' ,Value: filteredData2['PERCENT WHITE NON HISPANIC']},
             {Attribute: 'Black' ,Value: filteredData2['PERCENT BLACK NON HISPANIC']})
 
+            console.log('fil bar4' , barData4)
+            drawBar4(barData4)
 
-            console.log('fil' , barData2)
-            drawBar2(barData2)
-        })
-        
+
+            var barData6 = []
+          
+            barData6.push(
+            // {Attribute: 'Pacific Islander' ,Value: filteredData4['PERCENT PACIFIC ISLANDER']},
+            {Attribute: '% N Receives Public Assistance' ,Value: filteredData2['PERCENT RECEIVES PUBLIC ASSISTANCE']},
+            {Attribute: 'US Citizen' ,Value: filteredData2['PERCENT US CITIZEN']})
+  
+  
+            console.log('fil bar4' , barData6)
+            drawBar6(barData6)
+        })        
         
         drawMap();
         
@@ -98,9 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function drawBar(data){
-  var margin = {top: 20, right: 40, bottom: 40, left: 70},
+  var margin = {top: 50, right: 40, bottom: 40, left: 70},
     width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 200 - margin.top - margin.bottom;
 
     d3.select("#my_dataviz svg").remove()
 
@@ -117,12 +153,6 @@ var svg = d3.select("#my_dataviz")
   var x = d3.scaleLinear()
     .domain([0, 1])
     .range([ 0, width]);
-  // svg.append("g")
-  //   .attr("transform", "translate(0," + height + ")")
-  //   .call(d3.axisBottom(x))
-  //   .selectAll("text")
-  //     .attr("transform", "translate(-10,0)rotate(-45)")
-  //     .style("text-anchor", "end");
 
   // Y axis
   var y = d3.scaleBand()
@@ -132,6 +162,16 @@ var svg = d3.select("#my_dataviz")
   svg.append("g")
     .call(d3.axisLeft(y))
 
+    svg
+    .append("text")
+    .attr('x' , 10)
+    .attr('y' , -margin.top/2) //in 2 x oor y ki values ko change krty rha
+    .attr('class' , 'header')
+    .attr("font-family" , "Ariel")
+    .attr("font-size" , "18px")
+    .attr("text-anchor", "middle")
+    .text('Gender')
+    
   //Bars
   svg.selectAll("myRect")
     .data(data)
@@ -143,17 +183,6 @@ var svg = d3.select("#my_dataviz")
     .attr("height", y.bandwidth() )
     .attr("fill", "red")
     .attr('rx', 8)
-    // .on('mousemove', function(d) {
-    //             d3.select("#tooltip").style("opacity", 1)
-    //             .html(+d.Value * 100+'%' )
-    //             .style("left", (d3.event.pageX + 10) + "px")
-    //             .style("top", (d3.event.pageY - 15) + "px");
-    //         })
-    //         .on('mouseout', function(d,i) {
-    //            d3.select(this).attr("stroke-width" , '1px')
-    //            d3.select('#tooltip').style("opacity", 0)
-    //         })
-
       svg.selectAll(".textBar")
           .data(data)
           .enter()
@@ -169,11 +198,146 @@ var svg = d3.select("#my_dataviz")
 
 }
 
+function drawBar3(data){
+  var margin = {top: 50, right: 40, bottom: 40, left: 80},
+    width = 460 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+    d3.select("#my_dataviz3 svg").remove()
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz3")
+  .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 "+(width + margin.left + margin.right)+" "+(height + margin.top + margin.bottom))
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+           // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 1])
+    .range([ 0, width]);
+
+  var y = d3.scaleBand()
+    .range([ 0, height ])
+    .domain(data.map(function(d) { return d.Attribute; }))
+    .padding(.1);
+  svg.append("g")
+    .call(d3.axisLeft(y))
+
+    svg
+    .append("text")
+    .attr('x' , 50)
+    .attr('y' , -margin.top/2) //in 2 x oor y ki values ko change krty rha
+    .attr('class' , 'header')
+    .attr("font-family" , "Ariel")
+    .attr("font-size" , "18px")
+    .attr("text-anchor", "middle")
+    .text('Race (Order values - descendent)')
+
+  //Bars
+  svg.selectAll("myRect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", x(0) )
+    .attr("y", function(d) { return y(d.Attribute); })
+    .attr("width", function(d) { return x(d.Value); })
+    .attr("height", y.bandwidth() )
+    .attr("fill", "red")
+    .attr('rx', 8)
+
+    svg.selectAll(".textBar")
+          .data(data)
+          .enter()
+          .append("text")
+          .attr('class' , 'textBar')
+          .attr("x",  function(d) { return x(d.Value)+20;})
+          .attr("y", function(d) { return y(d.Attribute)+25; })
+          .attr("font-family" , "sans-serif")
+          .attr("font-size" , "15px")
+          .attr("fill" , "black")
+          .attr("text-anchor", "middle")
+          .text( function(d) { return ((d.Value * 100).toFixed(0) +'%');})
+}
+
+function drawBar5(data){
+  var margin = {top: 50, right: 40, bottom: 40, left: 80},
+    width = 460 - margin.left - margin.right,
+    height = 200 - margin.top - margin.bottom;
+
+    d3.select("#my_dataviz5 svg").remove()
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz5")
+  .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 "+(width + margin.left + margin.right)+" "+(height + margin.top + margin.bottom))
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+           // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 1])
+    .range([ 0, width]);
+
+  var y = d3.scaleBand()
+    .range([ 0, height ])
+    .domain(data.map(function(d) { return d.Attribute; }))
+    .padding(.1);
+  svg.append("g")
+    .call(d3.axisLeft(y))
+
+    // svg.append("g")
+    //   .attr("class", "y")
+    //   .attr("transform", "translate(0," + height + ")")
+    //   .call(y)
+    // .selectAll(".tick text")
+    //   .call(wrap, y.rangeBand());
+    
+
+    svg
+    .append("text")
+    .attr('x' , 50)
+    .attr('y' , -margin.top/2) //in 2 x oor y ki values ko change krty rha
+    .attr('class' , 'header')
+    .attr("font-family" , "Ariel")
+    .attr("font-size" , "18px")
+    .attr("text-anchor", "middle")
+    .text('Social')
+
+  //Bars
+  svg.selectAll("myRect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", x(0) )
+    .attr("y", function(d) { return y(d.Attribute); })
+    .attr("width", function(d) { return x(d.Value); })
+    .attr("height", y.bandwidth() )
+    .attr("fill", "red")
+    .attr('rx', 8)
+
+    svg.selectAll(".textBar")
+          .data(data)
+          .enter()
+          .append("text")
+          .attr('class' , 'textBar')
+          .attr("x",  function(d) { return x(d.Value)+20;})
+          .attr("y", function(d) { return y(d.Attribute)+25; })
+          .attr("font-family" , "sans-serif")
+          .attr("font-size" , "15px")
+          .attr("fill" , "black")
+          .attr("text-anchor", "middle")
+          .text( function(d) { return ((d.Value * 100).toFixed(0) +'%');})
+}
 
 function drawBar2(data){
-  var margin = {top: 20, right: 40, bottom: 40, left: 80},
+  var margin = {top: 50, right: 40, bottom: 40, left: 80},
     width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 200 - margin.top - margin.bottom;
 
     d3.select("#my_dataviz2 svg").remove()
 
@@ -190,12 +354,6 @@ var svg = d3.select("#my_dataviz2")
   var x = d3.scaleLinear()
     .domain([0, 1])
     .range([ 0, width]);
-  // svg.append("g")
-  //   .attr("transform", "translate(0," + height + ")")
-  //   .call(d3.axisBottom(x))   
-  //   .selectAll("text")
-  //     .attr("transform", "translate(-10,0)rotate(-45)")
-  //     .style("text-anchor", "end");
 
   // Y axis
   var y = d3.scaleBand()
@@ -204,6 +362,16 @@ var svg = d3.select("#my_dataviz2")
     .padding(.1);
   svg.append("g")
     .call(d3.axisLeft(y))
+
+    svg
+    .append("text")
+    .attr('x' , 10)
+    .attr('y' , -margin.top/2) //in 2 x oor y ki values ko change krty rha
+    .attr('class' , 'header')
+    .attr("font-family" , "Ariel")
+    .attr("font-size" , "18px")
+    .attr("text-anchor", "middle")
+    .text('Gender')
 
   //Bars
   svg.selectAll("myRect")
@@ -239,6 +407,137 @@ var svg = d3.select("#my_dataviz2")
           .attr("text-anchor", "middle")
           .text( function(d) { return ((d.Value * 100).toFixed(0) +'%');})
 }
+
+function drawBar4(data){
+  var margin = {top: 50, right: 40, bottom: 40, left: 80},
+    width = 460 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+    d3.select("#my_dataviz4 svg").remove()
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz4")
+  .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 "+(width + margin.left + margin.right)+" "+(height + margin.top + margin.bottom))
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+           // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 1])
+    .range([ 0, width]);
+
+  var y = d3.scaleBand()
+    .range([ 0, height ])
+    .domain(data.map(function(d) { return d.Attribute; }))
+    .padding(.1);
+  svg.append("g")
+    .call(d3.axisLeft(y))
+
+    
+    svg
+    .append("text")
+    .attr('x' , 50)
+    .attr('y' , -margin.top/2) //in 2 x oor y ki values ko change krty rha
+    .attr('class' , 'header')
+    .attr("font-family" , "Ariel")
+    .attr("font-size" , "18px")
+    .attr("text-anchor", "middle")
+    .text('Race (Order values - descendent)')
+
+  //Bars
+  svg.selectAll("myRect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", x(0) )
+    .attr("y", function(d) { return y(d.Attribute); })
+    .attr("width", function(d) { return x(d.Value); })
+    .attr("height", y.bandwidth() )
+    .attr("fill", "blue")
+    .attr('rx', 8)
+
+    svg.selectAll(".textBar")
+          .data(data)
+          .enter()
+          .append("text")
+          .attr('class' , 'textBar')
+          .attr("x",  function(d) { return x(d.Value)+20;})
+          .attr("y", function(d) { return y(d.Attribute)+25; })
+          .attr("font-family" , "sans-serif")
+          .attr("font-size" , "15px")
+          .attr("fill" , "black")
+          .attr("text-anchor", "middle")
+          .text( function(d) { return ((d.Value * 100).toFixed(0) +'%');})
+}
+
+function drawBar6(data){
+  var margin = {top: 50, right: 40, bottom: 40, left: 70},
+    width = 460 - margin.left - margin.right,
+    height = 200 - margin.top - margin.bottom;
+
+    d3.select("#my_dataviz6 svg").remove()
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz6")
+  .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 "+(width + margin.left + margin.right)+" "+(height + margin.top + margin.bottom))
+   .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+           // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 1])
+    .range([ 0, width]);
+
+  // Y axis
+  var y = d3.scaleBand()
+    .range([ 0, height ])
+    .domain(data.map(function(d) { return d.Attribute; }))
+    .padding(.1);
+  svg.append("g")
+    .call(d3.axisLeft(y))
+
+    svg
+    .append("text")
+    .attr('x' , 10)
+    .attr('y' , -margin.top/2) //in 2 x oor y ki values ko change krty rha
+    .attr('class' , 'header')
+    .attr("font-family" , "Ariel")
+    .attr("font-size" , "18px")
+    .attr("text-anchor", "middle")
+    .text('Social')
+    
+  //Bars
+  svg.selectAll("myRect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", x(0) )
+    .attr("y", function(d) { return y(d.Attribute); })
+    .attr("width", function(d) { return x(d.Value); })
+    .attr("height", y.bandwidth() )
+    .attr("fill", "blue")
+    .attr('rx', 8)
+      svg.selectAll(".textBar")
+          .data(data)
+          .enter()
+          .append("text")
+          .attr('class' , 'textBar')
+          .attr("x",  function(d) { return x(d.Value)+20;})
+          .attr("y", function(d) { return y(d.Attribute)+25; })
+          .attr("font-family" , "sans-serif")
+          .attr("font-size" , "14px")
+          .attr("fill" , "black")
+          .attr("text-anchor", "middle")
+          .text( function(d) { return ((d.Value * 100).toFixed(0) +'%');})
+
+}
+
 
 // Draw the map in the #map svg
 function drawMap() {
