@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'GettingStarted')" id="defaultOpen">Getting Started</button>
+  <button class="tablinks" onclick="openCity(event, 'BasicHtml')">Basic Html</button>
+  <button class="tablinks" onclick="openCity(event, 'IntrotoJs')"> Intro to Js</button>
+  <button class="tablinks" onclick="openCity(event, 'QuantitiesandAmounts')"> Quantities and Amounts</button>
+  <button class="tablinks" onclick="openCity(event, 'Distribution')">Distribution</button>
+  <button class="tablinks" onclick="openCity(event, 'TimeSeries')">Time Series</button>
+  <button class="tablinks" onclick="openCity(event, 'GeoGraphic')"> GeoGraphic</button>
+</div>
+
+<div>
+   <div id="GettingStarted" class="tabcontent">
+    <iframe class="responsive-iframe" src="https://livia.work/Interactive-Data-Vis-Fall2022/1_1_getting_started/" ></iframe>
+  </div>
+
+  <div id="BasicHtml" class="tabcontent">
+    <iframe class="responsive-iframe" src="https://livia.work/Interactive-Data-Vis-Fall2022/1_2_basic_html/" ></iframe>
+  </div>
+
+  <div id="IntrotoJs" class="tabcontent">
+    <iframe class="responsive-iframe" src="https://livia.work/Interactive-Data-Vis-Fall2022/1_3_intro_to_js" ></iframe>
+  </div>
+
+  <div id="QuantitiesandAmounts" class="tabcontent">
+    <iframe class="responsive-iframe" src="https://livia.work/Interactive-Data-Vis-Fall2022/2_1_quantities_and_amounts" ></iframe>
+  </div>
+
+  <div id="Distribution" class="tabcontent">
+    <iframe class="responsive-iframe" src="https://livia.work/Interactive-Data-Vis-Fall2022/2_2_distributions" ></iframe>
+  </div> 
+    
+  <div id="TimeSeries" class="tabcontent">
+    <iframe class="responsive-iframe" src="https://livia.work/Interactive-Data-Vis-Fall2022/2_3_time_series" ></iframe>
+  </div>
+
+  <div id="GeoGraphic" class="tabcontent">
+    <iframe class="responsive-iframe" src="https://livia.work/Interactive-Data-Vis-Fall2022/2_4_geographic" ></iframe>
+  </div>
+
+</div>
+
+
+<footer>
+  <div class="footer-content">
+    <p style="text-align: center;">NYC Open Data: Department of Youth and Community Development (DYCD)</p>
+</div>
+</footer>
+
+<script>
+  function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+  </script>
+     
+</body>
+</html> 

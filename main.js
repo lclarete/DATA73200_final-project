@@ -289,14 +289,9 @@ var svg = d3.select("#my_dataviz5")
     .padding(.1);
   svg.append("g")
     .call(d3.axisLeft(y))
+    .selectAll(".tick text")
+    .call(wrap, 40);
 
-    // svg.append("g")
-    //   .attr("class", "y")
-    //   .attr("transform", "translate(0," + height + ")")
-    //   .call(y)
-    // .selectAll(".tick text")
-    //   .call(wrap, y.rangeBand());
-    
 
     svg
     .append("text")
@@ -501,6 +496,8 @@ var svg = d3.select("#my_dataviz6")
     .padding(.1);
   svg.append("g")
     .call(d3.axisLeft(y))
+    .selectAll(".tick text")
+  .call(wrap, 40);
 
     svg
     .append("text")
@@ -652,4 +649,30 @@ function drawMap() {
         
    
 }
+
+function wrap(text, width) {
+  text.each(function() {
+    var text = d3.select(this),
+        words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 11, // ems
+        y = text.attr("y"),
+        x = text.attr("x"),
+        dy = parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("y", 0).attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", x).attr("y", y + ++lineNumber * lineHeight).attr("dy", dy + "em").text(word);
+      }
+    }
+  });
+}
+
  
